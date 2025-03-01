@@ -3,6 +3,10 @@ use std::error::Error;
 use std::time::Instant;
 
 use glam::DVec3;
+
+#[cfg(feature = "rayon")]
+use rayon::prelude::*;
+
 mod lut;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -140,14 +144,32 @@ fn process_pixel(srgb: bool, lut: &lut::Cube3D, pixel: &image::Rgb<u8>, _x: u32,
 
 
 fn process_image(lut: &lut::Cube3D, srgb: bool, src: &image::RgbImage, dst: &mut image::RgbImage) {
+    assert_eq!(src.width(), dst.width());
+    assert_eq!(src.height(), dst.height());
 
-    for x in 0..src.width() {
-        for y in 0..src.height() {
-            let pixel = src.get_pixel(x, y);
-
-            let out = process_pixel(srgb, &lut, &pixel, x, y);
-            dst.put_pixel(x, y, out);
-        }
+    #[cfg(feature = "rayon")]
+    {
+        println!("Processing with rayon parallel implementation");
+        dst.rows_mut().enumerate().par_bridge().for_each(|(y, mut row)| {
+            let y = y as u32;
+            for x in 0..src.width() {
+                let pixel = src.get_pixel(x, y);
+                let out = process_pixel(srgb, &lut, &pixel, x, y);
+                let dst = row.next().unwrap();
+                *dst = out;
+            }
+        });
     }
 
+    #[cfg(not(feature = "rayon"))]
+    {
+        println!("Processing with single-threaded implementation");
+        for y in 0..src.height() {
+            for x in 0..src.width() {
+                let pixel = src.get_pixel(x, y);
+                let out = process_pixel(srgb, &lut, &pixel, x, y);
+                dst.put_pixel(x, y, out);
+            }
+        }
+    }
 }

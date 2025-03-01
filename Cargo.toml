@@ -7,3 +7,8 @@ edition = "2021"
 # Image processing
 image = "0.25.5"
 glam = "0.30.0"
+rayon = { version = "1.10", optional = true }
+
+[features]
+default = ["rayon"]
+rayon = ["dep:rayon"]

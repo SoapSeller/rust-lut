@@ -42,7 +42,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Process the image using the LUT
         println!("Processing image...");
         let start = Instant::now();
-        process_image(&lut, false, &img, &mut target);
+        process_image(&lut, &img, &mut target);
         let duration = start.elapsed();
         println!("Image processing took: {:?}", duration);
         target.save("./data/example_processed.png")?;
@@ -51,33 +51,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-
-fn linear_to_srgb(x: f64) -> f64 {
-    if x >= 0.0031308 {
-        ((1.055 * x).powf(1.0/2.4)) - 0.055
-    } else {
-        12.92 * x
-    }
-}
-
-fn srgb_to_linear(x: f64) -> f64 {
-    if x >= 0.04045 {
-        ((x + 0.055)/(1. + 0.055)).powf(2.4)
-    }
-    else  {
-         x / 12.92
-    }
-}
-
-
-fn process_pixel(srgb: bool, lut: &lut::Cube3D, pixel: &image::Rgb<u8>, _x: u32, _y: u32) -> image::Rgb<u8> {
-
-    let rgb = if srgb {
-        DVec3::new(srgb_to_linear(pixel[0] as f64 / 255.0), srgb_to_linear(pixel[1] as f64 / 255.0), srgb_to_linear(pixel[2] as f64 / 255.0))
-        
-    } else {
-        DVec3::new(pixel[0] as f64 / 255.0, pixel[1] as f64 / 255.0, pixel[2] as f64 / 255.0)
-    };
+fn process_pixel(lut: &lut::Cube3D, pixel: &image::Rgb<u8>, _x: u32, _y: u32) -> image::Rgb<u8> {
+    let rgb = DVec3::new(pixel[0] as f64 / 255.0, pixel[1] as f64 / 255.0, pixel[2] as f64 / 255.0);
 
     // Do Trilinear Interpolation(https://paulbourke.net/miscellaneous/interpolation/)
 
@@ -128,22 +103,14 @@ fn process_pixel(srgb: bool, lut: &lut::Cube3D, pixel: &image::Rgb<u8>, _x: u32,
     let rgb = rgb.clamp(DVec3::new(0.0, 0.0, 0.0), DVec3::new(1.0, 1.0, 1.0));
 
     let mut out = [0_u8; 3];
-    if srgb {
-        for i in 0..3 {
-            out[i] = (linear_to_srgb(rgb[i]) * 255.0) as u8; 
-        }
-    } else {
-        for i in 0..3 {
-            out[i] = (rgb[i] * 255.0) as u8; 
-        }
+    for i in 0..3 {
+        out[i] = (rgb[i] * 255.0) as u8;
     }
 
     return image::Rgb(out);
-
 }
 
-
-fn process_image(lut: &lut::Cube3D, srgb: bool, src: &image::RgbImage, dst: &mut image::RgbImage) {
+fn process_image(lut: &lut::Cube3D, src: &image::RgbImage, dst: &mut image::RgbImage) {
     assert_eq!(src.width(), dst.width());
     assert_eq!(src.height(), dst.height());
 
@@ -154,7 +121,7 @@ fn process_image(lut: &lut::Cube3D, srgb: bool, src: &image::RgbImage, dst: &mut
             let y = y as u32;
             for x in 0..src.width() {
                 let pixel = src.get_pixel(x, y);
-                let out = process_pixel(srgb, &lut, &pixel, x, y);
+                let out = process_pixel(&lut, &pixel, x, y);
                 let dst = row.next().unwrap();
                 *dst = out;
             }
@@ -167,7 +134,7 @@ fn process_image(lut: &lut::Cube3D, srgb: bool, src: &image::RgbImage, dst: &mut
         for y in 0..src.height() {
             for x in 0..src.width() {
                 let pixel = src.get_pixel(x, y);
-                let out = process_pixel(srgb, &lut, &pixel, x, y);
+                let out = process_pixel(&lut, &pixel, x, y);
                 dst.put_pixel(x, y, out);
             }
         }

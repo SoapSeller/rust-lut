@@ -71,7 +71,6 @@ pub fn apply(lut: &lut::Cube3D, src: &RgbImage, dst: &mut RgbImage) {
 
     #[cfg(feature = "rayon")]
     {
-        println!("Processing with rayon parallel implementation");
         dst.rows_mut().enumerate().par_bridge().for_each(|(y, mut row)| {
             let y = y as u32;
             for x in 0..src.width() {
@@ -85,7 +84,6 @@ pub fn apply(lut: &lut::Cube3D, src: &RgbImage, dst: &mut RgbImage) {
 
     #[cfg(not(feature = "rayon"))]
     {
-        println!("Processing with single-threaded implementation");
         for y in 0..src.height() {
             for x in 0..src.width() {
                 let pixel = src.get_pixel(x, y);

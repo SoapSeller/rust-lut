@@ -12,3 +12,10 @@ rayon = { version = "1.10", optional = true }
 [features]
 default = ["rayon"]
 rayon = ["dep:rayon"]
+
+[dev-dependencies]
+criterion = "0.5"
+
+[[bench]]
+name = "processing_benchmark"
+harness = false

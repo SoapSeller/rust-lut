@@ -1,5 +1,8 @@
 # Rust-LUT
 
+[![Rust CI](https://github.com/SoapSeller/rust-lut/actions/workflows/ci.yml/badge.svg)](https://github.com/SoapSeller/rust-lut/actions/workflows/ci.yml)
+[![Benchmark](https://github.com/SoapSeller/rust-lut/actions/workflows/benchmark.yml/badge.svg)](https://github.com/SoapSeller/rust-lut/actions/workflows/benchmark.yml)
+
 A Rust implementation for applying 3D Lookup Tables (LUTs) to images. This tool allows you to transform images using industry-standard .cube LUT files commonly used in photography and video production.
 
 ## Features
@@ -91,3 +94,21 @@ MIT License. See the LICENSE file for details.
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration and delivery:
+
+- **CI Workflow**: Automatically builds, lints, and tests the code on every push and pull request to the main branch.
+- **Benchmark Workflow**: Runs performance benchmarks and tracks changes over time. Runs on every push to main and weekly.
+- **Release Workflow**: Automatically builds and publishes releases when a new tag is pushed.
+
+### Running Benchmarks Locally
+
+You can run the benchmarks locally using:
+
+```bash
+cargo bench
+```
+
+This will run all benchmarks and output the results to the terminal.

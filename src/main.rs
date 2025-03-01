@@ -1,5 +1,5 @@
-use std::path::Path;
 use std::error::Error;
+use std::path::Path;
 use std::time::Instant;
 
 mod lut;
@@ -12,8 +12,15 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("LUT Title: {}", lut.title);
     println!("LUT Size: {}", lut.size);
     let expected_vectors = lut.size * lut.size * lut.size;
-    println!("Number of vectors: {}[Expected: {}]", lut.vectors.len(), expected_vectors);
-    println!("First vector: {:?}", lut.vectors.first().unwrap_or(&glam::DVec3::ZERO));
+    println!(
+        "Number of vectors: {}[Expected: {}]",
+        lut.vectors.len(),
+        expected_vectors
+    );
+    println!(
+        "First vector: {:?}",
+        lut.vectors.first().unwrap_or(&glam::DVec3::ZERO)
+    );
 
     // Read the JPG file
     println!("\nReading JPG file...");
@@ -24,7 +31,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Check if the file exists
     if !img_path.exists() {
         println!("Image file not found: {:?}", img_path);
-        return Result::Ok(())
+        return Result::Ok(());
     } else {
         // Read the existing image
         let img = image::open(img_path)?;

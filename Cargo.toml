@@ -3,6 +3,14 @@ name = "rust-lut"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+bench = false
+
+[[bin]]
+name = "rust-lut"
+path = "src/main.rs"
+bench = false
+
 [dependencies]
 # Image processing
 image = "0.25.5"

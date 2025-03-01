@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1740868176954,
+  "lastUpdate": 1740873118239,
   "repoUrl": "https://github.com/SoapSeller/rust-lut",
   "entries": {
     "Rust Benchmark": [
@@ -52,6 +52,72 @@ window.BENCHMARK_DATA = {
           {
             "name": "process_pixel/color/green",
             "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/blue",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/gray",
+            "value": 42,
+            "range": "± 0",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dor@shahaf.com",
+            "name": "Dor Shahaf",
+            "username": "SoapSeller"
+          },
+          "committer": {
+            "email": "dor@shahaf.com",
+            "name": "Dor Shahaf",
+            "username": "SoapSeller"
+          },
+          "distinct": true,
+          "id": "7972b4427c44496fe3b78cf6caef5fe8be3e615c",
+          "message": "Update devcontainer with useful extensions&settings.",
+          "timestamp": "2025-03-02T00:48:58+01:00",
+          "tree_id": "be5fb9262b370445b8e73bd9d423c60e85c6c9a3",
+          "url": "https://github.com/SoapSeller/rust-lut/commit/7972b4427c44496fe3b78cf6caef5fe8be3e615c"
+        },
+        "date": 1740873118008,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "apply/full_image/1280x720",
+            "value": 14082572,
+            "range": "± 700424",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/black",
+            "value": 42,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/white",
+            "value": 42,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/red",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/green",
+            "value": 42,
             "range": "± 0",
             "unit": "ns/iter"
           },

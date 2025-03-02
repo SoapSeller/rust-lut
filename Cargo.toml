@@ -15,7 +15,12 @@ bench = false
 # Image processing
 image = "0.25.5"
 glam = "0.30.0"
+
 rayon = { version = "1.10", optional = true }
+
+wgpu = { version = "24.0.1", features = ["spirv", "vulkan-portability"] }
+futures = { version = "0.3", default-features = false, features = ["std", "executor"] }
+
 
 [features]
 default = ["rayon"]

@@ -4,6 +4,7 @@ use std::time::Instant;
 
 mod lut;
 mod processing;
+mod processing_wgpu;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Test the LUT parser
@@ -45,7 +46,13 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Process the image using the LUT
         println!("Processing image...");
         let start = Instant::now();
-        processing::apply(&lut, &img, &mut target);
+        processing::apply(&lut.clone(), &img, &mut target);
+        let duration = start.elapsed();
+        println!("Image processing took: {:?}", duration);
+
+        println!("Processing image on wgpu...");
+        let start = Instant::now();
+        processing_wgpu::apply(&lut, &img, &mut target);
         let duration = start.elapsed();
         println!("Image processing took: {:?}", duration);
         target.save("./data/example_processed.png")?;

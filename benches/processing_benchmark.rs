@@ -37,7 +37,8 @@ fn bench_apply(c: &mut Criterion) {
         |b| {
             b.iter(|| {
                 let mut target = RgbImage::new(width, height);
-                let _ = processing_ocl::apply(black_box(&lut), black_box(&img), black_box(&mut target));
+                let _ =
+                    processing_ocl::apply(black_box(&lut), black_box(&img), black_box(&mut target));
             })
         },
     );

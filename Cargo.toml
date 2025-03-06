@@ -16,6 +16,7 @@ bench = false
 image = "0.25.5"
 glam = "0.30.0"
 rayon = { version = "1.10", optional = true }
+ocl = "0.19"
 
 [features]
 default = ["rayon"]

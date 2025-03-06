@@ -1,7 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, BenchmarkId, Criterion};
 use image::RgbImage;
 // Import the crate modules directly
-use rust_lut::{lut, processing};
+use rust_lut::{lut, processing, processing_ocl};
 
 fn bench_apply(c: &mut Criterion) {
     // Load the LUT file
@@ -20,13 +20,24 @@ fn bench_apply(c: &mut Criterion) {
     // Create a benchmark group for the apply function
     let mut group = c.benchmark_group("apply");
 
-    // Benchmark the full image
+    // Benchmark the CPU implementation
     group.bench_function(
-        BenchmarkId::new("full_image", format!("{}x{}", width, height)),
+        BenchmarkId::new("cpu", format!("{}x{}", width, height)),
         |b| {
             b.iter(|| {
                 let mut target = RgbImage::new(width, height);
                 processing::apply(black_box(&lut), black_box(&img), black_box(&mut target));
+            })
+        },
+    );
+
+    // Benchmark the OpenCL implementation
+    group.bench_function(
+        BenchmarkId::new("ocl", format!("{}x{}", width, height)),
+        |b| {
+            b.iter(|| {
+                let mut target = RgbImage::new(width, height);
+                let _ = processing_ocl::apply(black_box(&lut), black_box(&img), black_box(&mut target));
             })
         },
     );

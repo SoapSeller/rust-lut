@@ -4,6 +4,9 @@ use std::time::Instant;
 
 mod lut;
 mod processing;
+mod processing_ocl;
+
+extern crate ocl;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Test the LUT parser
@@ -41,14 +44,33 @@ fn main() -> Result<(), Box<dyn Error>> {
             _ => return Err("Unsupported image format".into()),
         };
 
-        let mut target = image::RgbImage::new(img.width(), img.height());
-        // Process the image using the LUT
-        println!("Processing image...");
-        let start = Instant::now();
-        processing::apply(&lut, &img, &mut target);
-        let duration = start.elapsed();
-        println!("Image processing took: {:?}", duration);
-        target.save("./data/example_processed.png")?;
+        // Process the image using CPU implementation
+        let mut cpu_target = image::RgbImage::new(img.width(), img.height());
+        println!("\nProcessing image with CPU implementation...");
+        let cpu_start = Instant::now();
+        processing::apply(&lut, &img, &mut cpu_target);
+        let cpu_duration = cpu_start.elapsed();
+        println!("CPU processing took: {:?}", cpu_duration);
+        cpu_target.save("./data/example_processed_cpu.png")?;
+
+        // Process the image using OpenCL implementation
+        let mut ocl_target = image::RgbImage::new(img.width(), img.height());
+        println!("\nProcessing image with OpenCL implementation...");
+        let ocl_start = Instant::now();
+        match processing_ocl::apply(&lut, &img, &mut ocl_target) {
+            Ok(_) => {
+                let ocl_duration = ocl_start.elapsed();
+                println!("OpenCL processing took: {:?}", ocl_duration);
+                ocl_target.save("./data/example_processed_ocl.png")?;
+
+                // Print speedup
+                let speedup = cpu_duration.as_secs_f64() / ocl_duration.as_secs_f64();
+                println!("\nOpenCL speedup: {:.2}x", speedup);
+            },
+            Err(e) => {
+                println!("OpenCL processing failed: {}", e);
+            }
+        }
     }
 
     Ok(())

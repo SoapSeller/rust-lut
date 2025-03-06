@@ -18,7 +18,7 @@
 				"vadimcn.vscode-lldb",
 				"mutantdino.resourcemonitor",
 				"tamasfe.even-better-toml",
-				"serayuzgur.crates",
+				"fill-labs.dependi",
 				"rust-lang.rust-analyzer"
 			],
 

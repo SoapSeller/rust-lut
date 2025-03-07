@@ -16,32 +16,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install Rust
-        run: |
-          rustup toolchain install stable --profile minimal
-          rustup default stable
-          rustup component add rustfmt clippy
-      
-      - name: Cache dependencies
-        uses: actions/cache@v3
+      - name: Setup Rust Environment
+        uses: ./.github/actions/setup-rust
         with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
+          components: 'rustfmt clippy'
       
-      - name: Install OpenCL CPU Runtime (POCL)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pocl-opencl-icd ocl-icd-opencl-dev
-
-          # Install clinfo to verify the installation
-          sudo apt-get install -y clinfo
-
-          # Verify that OpenCL devices are detected
-          clinfo
+      - name: Install OpenCL Runtime
+        uses: ./.github/actions/install-opencl
           
       - name: Install LLVM SPIRV 15 and Clang 15
         uses: ./.github/actions/install-llvm-spirv
@@ -76,31 +57,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install Rust
-        run: |
-          rustup toolchain install stable --profile minimal
-          rustup default stable
+      - name: Setup Rust Environment
+        uses: ./.github/actions/setup-rust
       
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: ${{ runner.os }}-cargo-
-      
-      - name: Install OpenCL CPU Runtime (POCL)
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pocl-opencl-icd ocl-icd-opencl-dev
-
-          # Install clinfo to verify the installation
-          sudo apt-get install -y clinfo
-
-          # Verify that OpenCL devices are detected
-          clinfo
+      - name: Install OpenCL Runtime
+        uses: ./.github/actions/install-opencl
           
       - name: Install LLVM SPIRV 15 and Clang 15
         uses: ./.github/actions/install-llvm-spirv

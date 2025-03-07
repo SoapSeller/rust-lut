@@ -43,22 +43,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
-      - name: Install Rust
-        run: |
-          rustup toolchain install stable --profile minimal
-          rustup default stable
+      - name: Setup Rust Environment
+        uses: ./.github/actions/setup-rust
       
-      - name: Install OpenCL CPU Runtime (POCL) on Ubuntu
+      - name: Install OpenCL Runtime on Ubuntu
         if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y pocl-opencl-icd ocl-icd-opencl-dev
-
-          # Install clinfo to verify the installation
-          sudo apt-get install -y clinfo
-
-          # Verify that OpenCL devices are detected
-          clinfo
+        uses: ./.github/actions/install-opencl
           
       - name: Install LLVM SPIRV 15 and Clang 15 on Ubuntu
         if: matrix.os == 'ubuntu-latest'

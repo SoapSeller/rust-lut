@@ -1,0 +1,17 @@
+name: 'Install OpenCL Runtime'
+description: 'Installs OpenCL CPU Runtime (POCL) and verifies the installation'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install OpenCL CPU Runtime (POCL)
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y pocl-opencl-icd ocl-icd-opencl-dev
+
+        # Install clinfo to verify the installation
+        sudo apt-get install -y clinfo
+
+        # Verify that OpenCL devices are detected
+        clinfo

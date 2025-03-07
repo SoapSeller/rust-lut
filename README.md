@@ -86,6 +86,50 @@ LUT_3D_SIZE 33
 
 - [image](https://crates.io/crates/image) - For image processing
 - [glam](https://crates.io/crates/glam) - For vector math operations
+- [rayon](https://crates.io/crates/rayon) - For parallel processing (optional)
+- [ocl](https://crates.io/crates/ocl) - For OpenCL integration
+
+## Optional Features
+
+The library supports the following optional features that can be enabled or disabled:
+
+### Rayon
+
+```bash
+# Enable rayon (enabled by default)
+cargo build --release --features rayon
+
+# Disable rayon
+cargo build --release --no-default-features
+```
+
+The `rayon` feature enables parallel processing of image rows using Rayon's parallel iterator. This can significantly improve performance on multi-core CPUs by processing multiple rows of the image simultaneously.
+
+### SPIR-V
+
+```bash
+# Enable SPIR-V (enabled by default)
+cargo build --release --features spirv
+
+# Disable SPIR-V
+cargo build --release --no-default-features
+```
+
+The `spirv` feature enables the use of pre-compiled SPIR-V binary shaders for OpenCL processing instead of compiling OpenCL source code at runtime. This can provide better performance as the shader is pre-compiled during the build process.
+
+When this feature is enabled, the build script:
+1. Compiles the OpenCL kernel to LLVM bitcode using clang
+2. Converts the LLVM bitcode to SPIR-V using llvm-spirv
+
+**Requirements for SPIR-V compilation:**
+- clang (with OpenCL support)
+- llvm-spirv
+
+Both features are enabled by default. To disable both:
+
+```bash
+cargo build --release --no-default-features
+```
 
 ## License
 

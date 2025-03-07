@@ -1,0 +1,36 @@
+name: 'Install LLVM SPIRV 15 and Clang 15'
+description: 'Installs LLVM SPIRV 15 and Clang 15 for OpenCL to SPIR-V compilation'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Install LLVM SPIRV 15 and Clang 15
+      shell: bash
+      run: |
+        # Add LLVM 15 repository
+        wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+        sudo add-apt-repository "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main"
+        sudo apt-get update
+        
+        # Install Clang 15 and LLVM tools
+        sudo apt-get install -y clang-15 llvm-15-dev
+        
+        # Install SPIRV tools
+        sudo apt-get install -y llvm-spirv-15
+        
+        # Download and build llvm-spirv-15 if not available in apt
+        if ! dpkg -l | grep -q llvm-spirv-15; then
+          git clone https://github.com/KhronosGroup/SPIRV-LLVM-Translator.git
+          cd SPIRV-LLVM-Translator
+          git checkout llvm_release_150
+          mkdir build && cd build
+          cmake -DLLVM_DIR=/usr/lib/llvm-15/lib/cmake/llvm ..
+          make -j$(nproc)
+          sudo cp tools/llvm-spirv/llvm-spirv /usr/local/bin/llvm-spirv-15
+          cd ../..
+          rm -rf SPIRV-LLVM-Translator
+        fi
+        
+        # Verify installation
+        clang-15 --version
+        /usr/local/bin/llvm-spirv-15 --version || echo "llvm-spirv-15 installed but no version flag available"

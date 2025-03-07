@@ -42,6 +42,9 @@ jobs:
 
           # Verify that OpenCL devices are detected
           clinfo
+          
+      - name: Install LLVM SPIRV 15 and Clang 15
+        uses: ./.github/actions/install-llvm-spirv
 
       - name: Check formatting
         uses: actions-rs/cargo@v1
@@ -98,12 +101,12 @@ jobs:
 
           # Verify that OpenCL devices are detected
           clinfo
+          
+      - name: Install LLVM SPIRV 15 and Clang 15
+        uses: ./.github/actions/install-llvm-spirv
 
       - name: Run benchmarks
-        uses: actions-rs/cargo@v1
-        with:
-          command: bench
-          args: --verbose
+        run: cargo bench --no-default-features --features rayon --verbose
       
       - name: Store benchmark results
         uses: actions/upload-artifact@v4

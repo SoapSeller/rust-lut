@@ -4,6 +4,17 @@ use std::error::Error;
 
 use crate::lut;
 // OpenCL kernel for trilinear interpolation
+
+#[cfg(feature = "spirv")]
+type Iot = i8;
+
+#[cfg(not(feature = "spirv"))]
+type Iot = u8;
+
+#[cfg(feature = "spirv")]
+const KERNEL_SPIRV: &[u8] = include_bytes!("processing.spv");
+
+#[cfg(not(feature = "spirv"))]
 const KERNEL_SRC: &str = include_str!("processing.cl");
 
 pub struct ProcessingOcl {
@@ -23,9 +34,16 @@ impl ProcessingOcl {
             .build()?;
         let queue = Queue::new(&context, device, None)?;
         // Create OpenCL program and kernel
+        #[cfg(feature = "spirv")]
         let program = Program::builder()
             .devices(device)
-            .src(KERNEL_SRC)
+            .il(KERNEL_SPIRV)
+            .build(&context)?;
+
+        #[cfg(not(feature = "spirv"))]
+        let program = Program::builder()
+            .devices(device)
+            .source(KERNEL_SRC)
             .build(&context)?;
 
         // Create buffer for LUT data
@@ -57,13 +75,13 @@ impl ProcessingOcl {
         let height = src.height() as usize;
 
         // Create buffers
-        let input_buffer = Buffer::<u8>::builder()
+        let input_buffer = Buffer::<Iot>::builder()
             .queue(self.queue.clone())
             .flags(ocl::flags::MEM_READ_ONLY)
             .len(width * height * 3)
             .build()?;
 
-        let output_buffer = Buffer::<u8>::builder()
+        let output_buffer = Buffer::<Iot>::builder()
             .queue(self.queue.clone())
             .flags(ocl::flags::MEM_WRITE_ONLY)
             .len(width * height * 3)
@@ -72,6 +90,14 @@ impl ProcessingOcl {
         // let src_bytes: Vec<u8> = src.pixels().flat_map(|p| p.0.to_vec()).collect();
         // input_buffer.write(&src_bytes).enq()?;
         unsafe {
+            #[cfg(feature = "spirv")]
+            {
+                let src_ref = src as &[u8];
+                let i8_ref = &*(src_ref as *const _ as *const [i8]);
+                input_buffer.write(i8_ref).block(false).enq()?;
+            }
+
+            #[cfg(not(feature = "spirv"))]
             input_buffer.write(src as &[u8]).block(false).enq()?;
         }
 
@@ -93,22 +119,15 @@ impl ProcessingOcl {
             kernel.cmd().global_work_size(gws).enq()?;
         }
 
-        output_buffer.read(dst as &mut [u8]).enq()?;
-        // // Read results
-        // let mut result = vec![0u8; width * height * 3];
-        // output_buffer.read(&mut result).enq()?;
+        #[cfg(feature = "spirv")]
+        unsafe {
+            let dst_ref = dst as &mut [u8];
+            let i8_ref = &mut *(dst_ref as *mut _ as *mut [i8]);
+            output_buffer.read(i8_ref as &mut [i8]).enq()?;
+        }
 
-        // // Copy results to output image
-        // for y in 0..height {
-        //     for x in 0..width {
-        //         let idx = (y * width + x) * 3;
-        //         dst.put_pixel(
-        //             x as u32,
-        //             y as u32,
-        //             image::Rgb([result[idx], result[idx + 1], result[idx + 2]]),
-        //         );
-        //     }
-        // }
+        #[cfg(not(feature = "spirv"))]
+        output_buffer.read(dst as &mut [u8]).enq()?;
 
         Ok(())
     }

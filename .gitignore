@@ -26,3 +26,7 @@ Thumbs.db
 # Rust specific
 **/*.rs.bk
 .rustc_info.json
+
+# Spirv files
+*.spv
+*.bc

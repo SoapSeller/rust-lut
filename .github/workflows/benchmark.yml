@@ -46,9 +46,12 @@ jobs:
 
           # Verify that OpenCL devices are detected
           clinfo
+          
+      - name: Install LLVM SPIRV 15 and Clang 15
+        uses: ./.github/actions/install-llvm-spirv
 
       - name: Run benchmarks
-        run: cargo bench -- --output-format bencher | tee benchmark_results.txt
+        run: cargo bench --no-default-features --features rayon -- --output-format bencher | tee benchmark_results.txt
       
       - name: Store benchmark results
         uses: benchmark-action/github-action-benchmark@v1

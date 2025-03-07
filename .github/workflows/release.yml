@@ -59,6 +59,10 @@ jobs:
 
           # Verify that OpenCL devices are detected
           clinfo
+          
+      - name: Install LLVM SPIRV 15 and Clang 15 on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        uses: ./.github/actions/install-llvm-spirv
 
       - name: Build
         uses: actions-rs/cargo@v1

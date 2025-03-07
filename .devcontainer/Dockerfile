@@ -7,6 +7,8 @@ RUN sudo apt update && \
         mesa-vulkan-drivers \
         ocl-icd-opencl-dev \
         intel-opencl-icd \
+        llvm-spirv-15 \
+        clang-15 \
     && \
     sudo apt autoclean && \
     sudo apt -y autoremove && \

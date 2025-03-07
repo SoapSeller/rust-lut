@@ -22,11 +22,9 @@ jobs:
           fetch-depth: 0  # Fetch all history for comparing benchmarks
       
       - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
+        run: |
+          rustup toolchain install stable --profile minimal
+          rustup default stable
       
       - name: Cache dependencies
         uses: actions/cache@v3

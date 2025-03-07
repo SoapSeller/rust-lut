@@ -92,8 +92,8 @@ fn bench_processing_ocl_apply(c: &mut Criterion) {
     let height = img.height();
 
     // Create a ProcessingOcl instance
-    let processing_ocl = processing_ocl::ProcessingOcl::new(&lut)
-        .expect("Failed to create ProcessingOcl instance");
+    let processing_ocl =
+        processing_ocl::ProcessingOcl::new(&lut).expect("Failed to create ProcessingOcl instance");
 
     // Create a benchmark group for the ProcessingOcl::apply method
     let mut group = c.benchmark_group("ProcessingOcl::apply");
@@ -111,5 +111,10 @@ fn bench_processing_ocl_apply(c: &mut Criterion) {
     group.finish();
 }
 
-criterion_group!(benches, bench_apply, bench_process_pixel, bench_processing_ocl_apply);
+criterion_group!(
+    benches,
+    bench_apply,
+    bench_process_pixel,
+    bench_processing_ocl_apply
+);
 criterion_main!(benches);

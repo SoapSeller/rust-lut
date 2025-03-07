@@ -74,7 +74,6 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Print speedup
         let speedup = cpu_duration.as_secs_f64() / ocl_duration.as_secs_f64();
         println!("\nOpenCL speedup: {:.2}x", speedup);
-
     }
 
     Ok(())

@@ -48,7 +48,7 @@ impl ProcessingOcl {
             program,
             queue,
             lut: lut_buffer,
-            lut_size: lut.size
+            lut_size: lut.size,
         })
     }
 
@@ -71,7 +71,9 @@ impl ProcessingOcl {
 
         // let src_bytes: Vec<u8> = src.pixels().flat_map(|p| p.0.to_vec()).collect();
         // input_buffer.write(&src_bytes).enq()?;
-        unsafe { input_buffer.write(src as &[u8]).block(false).enq()?; }
+        unsafe {
+            input_buffer.write(src as &[u8]).block(false).enq()?;
+        }
 
         let kernel = Kernel::builder()
             .program(&self.program)
@@ -90,7 +92,6 @@ impl ProcessingOcl {
         unsafe {
             kernel.cmd().global_work_size(gws).enq()?;
         }
-
 
         output_buffer.read(dst as &mut [u8]).enq()?;
         // // Read results

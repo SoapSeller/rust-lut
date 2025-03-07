@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741370745646,
+  "lastUpdate": 1741371179794,
   "repoUrl": "https://github.com/SoapSeller/rust-lut",
   "entries": {
     "Rust Benchmark": [
@@ -267,6 +267,78 @@ window.BENCHMARK_DATA = {
             "name": "ProcessingOcl::apply/struct/1280x720",
             "value": 12638288,
             "range": "± 195809",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dor@shahaf.com",
+            "name": "Dor Shahaf",
+            "username": "SoapSeller"
+          },
+          "committer": {
+            "email": "dor@shahaf.com",
+            "name": "Dor Shahaf",
+            "username": "SoapSeller"
+          },
+          "distinct": true,
+          "id": "57abde9d8afd79bac17520eb7562defe755dae50",
+          "message": "Replace actions-rs/toolchain with direct rustup commands",
+          "timestamp": "2025-03-07T18:08:55Z",
+          "tree_id": "d796dd831393602c1ea3d9109a1868c6860ea117",
+          "url": "https://github.com/SoapSeller/rust-lut/commit/57abde9d8afd79bac17520eb7562defe755dae50"
+        },
+        "date": 1741371179589,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "apply/cpu/1280x720",
+            "value": 14122329,
+            "range": "± 154186",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/black",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/white",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/red",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/green",
+            "value": 42,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/blue",
+            "value": 42,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/gray",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "ProcessingOcl::apply/struct/1280x720",
+            "value": 11841217,
+            "range": "± 182098",
             "unit": "ns/iter"
           }
         ]

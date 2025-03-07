@@ -31,18 +31,6 @@ fn bench_apply(c: &mut Criterion) {
         },
     );
 
-    // Benchmark the OpenCL implementation
-    group.bench_function(
-        BenchmarkId::new("ocl", format!("{}x{}", width, height)),
-        |b| {
-            b.iter(|| {
-                let mut target = RgbImage::new(width, height);
-                let _ =
-                    processing_ocl::apply(black_box(&lut), black_box(&img), black_box(&mut target));
-            })
-        },
-    );
-
     group.finish();
 }
 
@@ -88,5 +76,40 @@ fn bench_process_pixel(c: &mut Criterion) {
     group.finish();
 }
 
-criterion_group!(benches, bench_apply, bench_process_pixel);
+// Benchmark the ProcessingOcl::apply method
+fn bench_processing_ocl_apply(c: &mut Criterion) {
+    // Load the LUT file
+    let lut = lut::cube3d("data/example.cube").expect("Failed to load LUT file");
+
+    // Load the image
+    let img_path = "data/example.jpg";
+    let img = image::open(img_path)
+        .expect("Failed to open image")
+        .to_rgb8();
+
+    // Create a target image with the same dimensions
+    let width = img.width();
+    let height = img.height();
+
+    // Create a ProcessingOcl instance
+    let processing_ocl = processing_ocl::ProcessingOcl::new(&lut)
+        .expect("Failed to create ProcessingOcl instance");
+
+    // Create a benchmark group for the ProcessingOcl::apply method
+    let mut group = c.benchmark_group("ProcessingOcl::apply");
+
+    group.bench_function(
+        BenchmarkId::new("struct", format!("{}x{}", width, height)),
+        |b| {
+            b.iter(|| {
+                let mut target = RgbImage::new(width, height);
+                let _ = processing_ocl.apply(black_box(&img), black_box(&mut target));
+            })
+        },
+    );
+
+    group.finish();
+}
+
+criterion_group!(benches, bench_apply, bench_process_pixel, bench_processing_ocl_apply);
 criterion_main!(benches);

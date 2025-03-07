@@ -56,30 +56,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         // Process the image using OpenCL implementation
         let mut ocl_target = image::RgbImage::new(img.width(), img.height());
         println!("\nProcessing image with OpenCL implementation...");
-        let ocl_start = Instant::now();
-        match processing_ocl::apply(&lut, &img, &mut ocl_target) {
-            Ok(_) => {
-                let ocl_duration = ocl_start.elapsed();
-                println!("OpenCL processing took: {:?}", ocl_duration);
-                ocl_target.save("./data/example_processed_ocl.png")?;
-
-                // Print speedup
-                let speedup = cpu_duration.as_secs_f64() / ocl_duration.as_secs_f64();
-                println!("\nOpenCL speedup: {:.2}x", speedup);
-            }
-            Err(e) => {
-                println!("OpenCL processing failed: {}", e);
-            }
-        }
-
-
-        // Process the image using OpenCL struct implementation
-        let mut ocl_target = image::RgbImage::new(img.width(), img.height());
-        println!("\nProcessing image with OpenCL struct implementation...");
         let oclp = processing_ocl::ProcessingOcl::new(&lut)?;
         match oclp.apply(&img, &mut ocl_target) {
             Ok(_) => {
-                ocl_target.save("./data/example_processed_ocl_struct.png")?;
+                ocl_target.save("./data/example_processed_ocl.png")?;
             }
             Err(e) => {
                 println!("OpenCL processing failed: {}", e);
@@ -87,9 +67,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
         let ocl_start: Instant = Instant::now();
 
-        for _i in 0..10000 {
-            let _ = oclp.apply(&img, &mut ocl_target);
-        }
+        let _ = oclp.apply(&img, &mut ocl_target);
 
         let ocl_duration = ocl_start.elapsed() / 10000;
         println!("OpenCL processing took: {:?}", ocl_duration);

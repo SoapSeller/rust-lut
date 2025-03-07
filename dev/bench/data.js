@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1741376477485,
+  "lastUpdate": 1741376990016,
   "repoUrl": "https://github.com/SoapSeller/rust-lut",
   "entries": {
     "Rust Benchmark": [
@@ -476,6 +476,72 @@ window.BENCHMARK_DATA = {
           {
             "name": "process_pixel/color/gray",
             "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "dor@shahaf.com",
+            "name": "Dor Shahaf",
+            "username": "SoapSeller"
+          },
+          "committer": {
+            "email": "dor@shahaf.com",
+            "name": "Dor Shahaf",
+            "username": "SoapSeller"
+          },
+          "distinct": true,
+          "id": "b19c63fbf9d8e0b08b4c5c2580ba45b765a728c0",
+          "message": "Add option to pre-build spirv for ocl impl.",
+          "timestamp": "2025-03-07T20:44:29+01:00",
+          "tree_id": "7767f37f5c5a92f4c0c773e91b2357c37f89a159",
+          "url": "https://github.com/SoapSeller/rust-lut/commit/b19c63fbf9d8e0b08b4c5c2580ba45b765a728c0"
+        },
+        "date": 1741376989357,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "apply/cpu/1280x720",
+            "value": 14152509,
+            "range": "± 746809",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/black",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/white",
+            "value": 41,
+            "range": "± 1",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/red",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/green",
+            "value": 41,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/blue",
+            "value": 42,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/gray",
+            "value": 42,
             "range": "± 0",
             "unit": "ns/iter"
           }

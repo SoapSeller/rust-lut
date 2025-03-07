@@ -50,6 +50,18 @@ jobs:
           toolchain: stable
           override: true
       
+      - name: Install OpenCL CPU Runtime (POCL) on Ubuntu
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pocl-opencl-icd ocl-icd-opencl-dev
+
+          # Install clinfo to verify the installation
+          sudo apt-get install -y clinfo
+
+          # Verify that OpenCL devices are detected
+          clinfo
+
       - name: Build
         uses: actions-rs/cargo@v1
         with:

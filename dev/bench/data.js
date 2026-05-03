@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777174771514,
+  "lastUpdate": 1777780439121,
   "repoUrl": "https://github.com/SoapSeller/rust-lut",
   "entries": {
     "Rust Benchmark": [
@@ -4953,6 +4953,76 @@ window.BENCHMARK_DATA = {
             "name": "ProcessingOcl::apply/struct/1280x720",
             "value": 12851300,
             "range": "± 80702",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "name": "Dor Shahaf",
+            "username": "SoapSeller",
+            "email": "dor@shahaf.com"
+          },
+          "committer": {
+            "name": "Dor Shahaf",
+            "username": "SoapSeller",
+            "email": "dor@shahaf.com"
+          },
+          "id": "884a8dbfdafd67fd4b1b8197373b5db20a833790",
+          "message": "Refactor workflows to more reusable actions(setup rust & install opencl).",
+          "timestamp": "2025-03-07T22:56:08Z",
+          "url": "https://github.com/SoapSeller/rust-lut/commit/884a8dbfdafd67fd4b1b8197373b5db20a833790"
+        },
+        "date": 1777780438574,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "apply/cpu/1280x720",
+            "value": 20795006,
+            "range": "± 1251289",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/black",
+            "value": 44,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/white",
+            "value": 52,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/red",
+            "value": 50,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/green",
+            "value": 47,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/blue",
+            "value": 48,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "process_pixel/color/gray",
+            "value": 61,
+            "range": "± 0",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "ProcessingOcl::apply/struct/1280x720",
+            "value": 13729262,
+            "range": "± 109352",
             "unit": "ns/iter"
           }
         ]
